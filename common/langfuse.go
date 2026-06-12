@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/bytedance/gopkg/util/gopool"
 	langfuse "github.com/git-hulk/langfuse-go"
@@ -110,7 +111,8 @@ func RecordTrace(config LangfuseConfig, data LangfuseTraceData) {
 			return
 		}
 
-		ctx := context.Background()
+		ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+		defer cancel()
 
 		tags := []string{data.ModelName}
 		if data.IsStream {

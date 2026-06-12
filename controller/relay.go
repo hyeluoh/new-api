@@ -244,11 +244,9 @@ func Relay(c *gin.Context, relayFormat types.RelayFormat) {
 		gopool.Go(func() {
 			perfmetrics.RecordRelaySample(relayInfo, false, 0)
 		})
-		gopool.Go(func() {
-			modelName := relayInfo.OriginModelName
-			errMsg := newAPIError.Error()
-			common.RecordLangfuseErrorTrace(c, modelName, newAPIError.StatusCode, errMsg)
-		})
+		modelName := relayInfo.OriginModelName
+		errMsg := newAPIError.Error()
+		common.RecordLangfuseErrorTrace(c, modelName, newAPIError.StatusCode, errMsg)
 	}
 }
 
