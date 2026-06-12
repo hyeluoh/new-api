@@ -60,7 +60,7 @@ func GetLangfuseManager() *langfuseManager {
 // clientKey 生成客户端缓存 key
 func clientKey(publicKey, secretKey, host string) string {
 	h := sha256.New()
-	h.Write([]byte(publicKey + secretKey + host))
+	h.Write([]byte(publicKey + "|" + secretKey + "|" + host))
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
 
@@ -99,7 +99,7 @@ func RecordTrace(config LangfuseConfig, data LangfuseTraceData) {
 	gopool.Go(func() {
 		defer func() {
 			if r := recover(); r != nil {
-				SysLog(fmt.Sprintf("langfuse RecordTrace panic: %v", r))
+				SysLog("langfuse RecordTrace panic recovered")
 			}
 		}()
 
