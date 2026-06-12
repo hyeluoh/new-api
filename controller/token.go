@@ -20,6 +20,7 @@ func buildMaskedTokenResponse(token *model.Token) *model.Token {
 	}
 	maskedToken := *token
 	maskedToken.Key = token.GetMaskedKey()
+	maskedToken.LangfuseSecretKey = token.GetMaskedLangfuseSecretKey()
 	return &maskedToken
 }
 
@@ -221,6 +222,9 @@ func AddToken(c *gin.Context) {
 		AllowIps:           token.AllowIps,
 		Group:              token.Group,
 		CrossGroupRetry:    token.CrossGroupRetry,
+		LangfusePublicKey:  token.LangfusePublicKey,
+		LangfuseSecretKey:  token.LangfuseSecretKey,
+		LangfuseHost:       token.LangfuseHost,
 	}
 	err = cleanToken.Insert()
 	if err != nil {
@@ -299,6 +303,11 @@ func UpdateToken(c *gin.Context) {
 		cleanToken.AllowIps = token.AllowIps
 		cleanToken.Group = token.Group
 		cleanToken.CrossGroupRetry = token.CrossGroupRetry
+		cleanToken.LangfusePublicKey = token.LangfusePublicKey
+		if token.LangfuseSecretKey != cleanToken.GetMaskedLangfuseSecretKey() {
+			cleanToken.LangfuseSecretKey = token.LangfuseSecretKey
+		}
+		cleanToken.LangfuseHost = token.LangfuseHost
 	}
 	err = cleanToken.Update()
 	if err != nil {
