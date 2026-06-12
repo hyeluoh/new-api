@@ -65,13 +65,13 @@ func clientKey(publicKey, secretKey, host string) string {
 }
 
 // GetClient 获取或创建 Langfuse 客户端
-func (m *langfuseManager) GetClient(publicKey, secretKey, host string) (*langfuse.Langfuse, error) {
+func (m *langfuseManager) GetClient(publicKey, secretKey, host string) *langfuse.Langfuse {
 	key := clientKey(publicKey, secretKey, host)
 
 	m.mu.RLock()
 	if client, ok := m.clients[key]; ok {
 		m.mu.RUnlock()
-		return client, nil
+		return client
 	}
 	m.mu.RUnlock()
 
@@ -79,12 +79,15 @@ func (m *langfuseManager) GetClient(publicKey, secretKey, host string) (*langfus
 	defer m.mu.Unlock()
 
 	if client, ok := m.clients[key]; ok {
-		return client, nil
+		return client
 	}
 
 	client := langfuse.NewClient(host, publicKey, secretKey)
+	if client == nil {
+		return nil
+	}
 	m.clients[key] = client
-	return client, nil
+	return client
 }
 
 // RecordTrace 异步记录请求元数据到 Langfuse
@@ -101,9 +104,9 @@ func RecordTrace(config LangfuseConfig, data LangfuseTraceData) {
 		}()
 
 		mgr := GetLangfuseManager()
-		client, err := mgr.GetClient(config.PublicKey, config.SecretKey, config.Host)
-		if err != nil {
-			SysLog(fmt.Sprintf("langfuse GetClient error: %v", err))
+		client := mgr.GetClient(config.PublicKey, config.SecretKey, config.Host)
+		if client == nil {
+			SysLog("langfuse GetClient returned nil")
 			return
 		}
 
