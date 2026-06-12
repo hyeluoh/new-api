@@ -304,7 +304,7 @@ func UpdateToken(c *gin.Context) {
 		cleanToken.Group = token.Group
 		cleanToken.CrossGroupRetry = token.CrossGroupRetry
 		cleanToken.LangfusePublicKey = token.LangfusePublicKey
-		if token.LangfuseSecretKey != cleanToken.GetMaskedLangfuseSecretKey() {
+		if token.LangfuseSecretKey != "" && !strings.Contains(token.LangfuseSecretKey, "*") {
 			cleanToken.LangfuseSecretKey = token.LangfuseSecretKey
 		}
 		cleanToken.LangfuseHost = token.LangfuseHost
