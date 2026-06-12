@@ -253,6 +253,9 @@ func PostWssConsumeQuota(ctx *gin.Context, relayInfo *relaycommon.RelayInfo, mod
 		Group:            relayInfo.UsingGroup,
 		Other:            other,
 	})
+	gopool.Go(func() {
+		common.RecordLangfuseTraceFromContext(ctx, modelName, usage.InputTokens, usage.OutputTokens, usage.InputTokens+usage.OutputTokens, int64(quota), true, 200, "")
+	})
 }
 
 func CalcOpenRouterCacheCreateTokens(usage dto.Usage, priceData types.PriceData) int {
@@ -376,6 +379,9 @@ func PostAudioConsumeQuota(ctx *gin.Context, relayInfo *relaycommon.RelayInfo, u
 	})
 	gopool.Go(func() {
 		perfmetrics.RecordRelaySample(relayInfo, true, int64(usage.CompletionTokens))
+	})
+	gopool.Go(func() {
+		common.RecordLangfuseTraceFromContext(ctx, relayInfo.OriginModelName, usage.PromptTokens, usage.CompletionTokens, usage.PromptTokens+usage.CompletionTokens, int64(quota), true, 200, "")
 	})
 }
 
