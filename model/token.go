@@ -358,21 +358,7 @@ func (token *Token) LangfuseEnabled() bool {
 }
 
 func (token *Token) GetMaskedLangfuseSecretKey() string {
-	if token.LangfuseSecretKey == "" {
-		return ""
-	}
-	if len(token.LangfuseSecretKey) <= 4 {
-		return strings.Repeat("*", len(token.LangfuseSecretKey))
-	}
-	return strings.Repeat("*", len(token.LangfuseSecretKey)-4) + token.LangfuseSecretKey[len(token.LangfuseSecretKey)-4:]
-}
-
-// IsMaskedSecretKey 检查字符串是否是脱敏后的格式
-func IsMaskedSecretKey(s string) bool {
-	if s == "" {
-		return false
-	}
-	return strings.HasPrefix(s, "****") || s == strings.Repeat("*", len(s))
+	return MaskTokenKey(token.LangfuseSecretKey)
 }
 
 func DisableModelLimits(tokenId int) error {
