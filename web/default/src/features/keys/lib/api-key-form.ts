@@ -40,7 +40,18 @@ export function getApiKeyFormSchema(t: TFunction) {
       tokenCount: z.number().min(1).optional(),
       langfuse_public_key: z.string().optional(),
       langfuse_secret_key: z.string().optional(),
-      langfuse_host: z.string().optional(),
+      langfuse_host: z
+        .string()
+        .optional()
+        .refine(
+          (val) =>
+            !val || val.startsWith('http://') || val.startsWith('https://'),
+          {
+            message: t(
+              'Provide a valid URL starting with http:// or https://'
+            ),
+          }
+        ),
     })
     .superRefine((data, ctx) => {
       if (data.unlimited_quota) {

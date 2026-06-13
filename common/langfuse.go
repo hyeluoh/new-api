@@ -41,18 +41,24 @@ type LangfuseTraceData struct {
 
 // langfuseManager 管理 Langfuse 客户端实例的缓存池
 type langfuseManager struct {
-	mu      sync.RWMutex
-	clients map[string]*langfuse.Langfuse
+	mu         sync.RWMutex
+	clients    map[string]*langfuse.Langfuse
+	lastUsed   map[string]time.Time
+	maxClients int
 }
 
 var langfuseManagerInstance *langfuseManager
 var langfuseOnce sync.Once
 
+const defaultMaxLangfuseClients = 128
+
 // GetLangfuseManager 获取 Langfuse 管理器单例
 func GetLangfuseManager() *langfuseManager {
 	langfuseOnce.Do(func() {
 		langfuseManagerInstance = &langfuseManager{
-			clients: make(map[string]*langfuse.Langfuse),
+			clients:    make(map[string]*langfuse.Langfuse),
+			lastUsed:   make(map[string]time.Time),
+			maxClients: defaultMaxLangfuseClients,
 		}
 	})
 	return langfuseManagerInstance
@@ -61,8 +67,28 @@ func GetLangfuseManager() *langfuseManager {
 // clientKey 生成客户端缓存 key
 func clientKey(publicKey, secretKey, host string) string {
 	h := sha256.New()
-	h.Write([]byte(publicKey + "|" + secretKey + "|" + host))
+	h.Write([]byte(fmt.Sprintf("%d:%s|%d:%s|%d:%s", len(publicKey), publicKey, len(secretKey), secretKey, len(host), host)))
 	return fmt.Sprintf("%x", h.Sum(nil))
+}
+
+// evictOldestClient 清理最久未使用的客户端，避免缓存无限增长
+func (m *langfuseManager) evictOldestClient() {
+	if len(m.clients) < m.maxClients {
+		return
+	}
+
+	var oldestKey string
+	var oldestTime time.Time
+	for key, t := range m.lastUsed {
+		if oldestTime.IsZero() || t.Before(oldestTime) {
+			oldestTime = t
+			oldestKey = key
+		}
+	}
+	if oldestKey != "" {
+		delete(m.clients, oldestKey)
+		delete(m.lastUsed, oldestKey)
+	}
 }
 
 // GetClient 获取或创建 Langfuse 客户端
@@ -72,6 +98,9 @@ func (m *langfuseManager) GetClient(publicKey, secretKey, host string) *langfuse
 	m.mu.RLock()
 	if client, ok := m.clients[key]; ok {
 		m.mu.RUnlock()
+		m.mu.Lock()
+		m.lastUsed[key] = time.Now()
+		m.mu.Unlock()
 		return client
 	}
 	m.mu.RUnlock()
@@ -80,14 +109,18 @@ func (m *langfuseManager) GetClient(publicKey, secretKey, host string) *langfuse
 	defer m.mu.Unlock()
 
 	if client, ok := m.clients[key]; ok {
+		m.lastUsed[key] = time.Now()
 		return client
 	}
+
+	m.evictOldestClient()
 
 	client := langfuse.NewClient(host, publicKey, secretKey)
 	if client == nil {
 		return nil
 	}
 	m.clients[key] = client
+	m.lastUsed[key] = time.Now()
 	return client
 }
 
