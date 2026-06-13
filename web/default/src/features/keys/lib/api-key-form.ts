@@ -38,9 +38,9 @@ export function getApiKeyFormSchema(t: TFunction) {
       group: z.string().optional(),
       cross_group_retry: z.boolean().optional(),
       tokenCount: z.number().min(1).optional(),
-      langfuse_host: z.string().optional(),
       langfuse_public_key: z.string().optional(),
       langfuse_secret_key: z.string().optional(),
+      langfuse_host: z.string().optional(),
     })
     .superRefine((data, ctx) => {
       if (data.unlimited_quota) {
