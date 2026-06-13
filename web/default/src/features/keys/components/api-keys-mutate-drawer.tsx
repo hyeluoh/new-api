@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react'
 import { useForm, type SubmitErrorHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { ChevronDown, KeyRound, Settings2, WalletCards } from 'lucide-react'
+import { ChevronDown, KeyRound, Settings2, WalletCards, Activity } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { getUserModels, getUserGroups } from '@/lib/api'
@@ -98,6 +98,7 @@ export function ApiKeysMutateDrawer({
   const { status } = useStatus()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [advancedOpen, setAdvancedOpen] = useState(false)
+  const [langfuseOpen, setLangfuseOpen] = useState(false)
   const defaultUseAutoGroup = status?.default_use_auto_group === true
 
   // Fetch models
@@ -565,6 +566,95 @@ export function ApiKeysMutateDrawer({
                             {t(
                               'Do not over-trust this feature. IP may be spoofed. Please use with nginx, CDN and other gateways.'
                             )}
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </CollapsibleContent>
+              </SideDrawerSection>
+            </Collapsible>
+
+            <Collapsible open={langfuseOpen} onOpenChange={setLangfuseOpen}>
+              <SideDrawerSection>
+                <CollapsibleTrigger
+                  render={
+                    <button
+                      type='button'
+                      className='hover:bg-muted/40 flex w-full items-center gap-3 rounded-md py-1.5 text-left transition-colors'
+                    />
+                  }
+                >
+                  <SideDrawerSectionHeader
+                    className='flex-1'
+                    title={t('Langfuse Observability')}
+                    description={t('Configure Langfuse tracing for this API key')}
+                    icon={<Activity className='size-4' />}
+                  />
+                  <ChevronDown
+                    className={cn(
+                      'text-muted-foreground size-4 shrink-0 transition-transform',
+                      langfuseOpen && 'rotate-180'
+                    )}
+                  />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className='flex flex-col gap-4 pt-2'>
+                    <FormField
+                      control={form.control}
+                      name='langfuse_host'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('Langfuse Host')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder='https://cloud.langfuse.com'
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            {t('Langfuse server URL')}
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name='langfuse_public_key'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('Langfuse Public Key')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder='pk-...'
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name='langfuse_secret_key'
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>{t('Langfuse Secret Key')}</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type='password'
+                              placeholder={isUpdate ? t('Leave empty to keep current') : 'sk-...'}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            {isUpdate
+                              ? t('Leave empty to keep the current secret key')
+                              : t('Enter your Langfuse secret key')}
                           </FormDescription>
                           <FormMessage />
                         </FormItem>

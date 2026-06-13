@@ -20,6 +20,10 @@ const (
 	ContextKeyTokenModelLimit        ContextKey = "token_model_limit"
 	ContextKeyTokenCrossGroupRetry   ContextKey = "token_cross_group_retry"
 
+	ContextKeyLangfusePublicKey ContextKey = "langfuse_public_key"
+	ContextKeyLangfuseSecretKey ContextKey = "langfuse_secret_key"
+	ContextKeyLangfuseHost      ContextKey = "langfuse_host"
+
 	/* channel related keys */
 	ContextKeyChannelId                ContextKey = "channel_id"
 	ContextKeyChannelName              ContextKey = "channel_name"

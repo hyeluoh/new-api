@@ -28,6 +28,9 @@ type Token struct {
 	UsedQuota          int            `json:"used_quota" gorm:"default:0"` // used quota
 	Group              string         `json:"group" gorm:"default:''"`
 	CrossGroupRetry    bool           `json:"cross_group_retry"` // 跨分组重试，仅auto分组有效
+	LangfusePublicKey  string         `json:"langfuse_public_key" gorm:"type:text"`
+	LangfuseSecretKey  string         `json:"langfuse_secret_key" gorm:"type:text"`
+	LangfuseHost       string         `json:"langfuse_host" gorm:"type:text"`
 	DeletedAt          gorm.DeletedAt `gorm:"index"`
 }
 
@@ -295,7 +298,8 @@ func (token *Token) Update() (err error) {
 		}
 	}()
 	err = DB.Model(token).Select("name", "status", "expired_time", "remain_quota", "unlimited_quota",
-		"model_limits_enabled", "model_limits", "allow_ips", "group", "cross_group_retry").Updates(token).Error
+		"model_limits_enabled", "model_limits", "allow_ips", "group", "cross_group_retry",
+		"langfuse_public_key", "langfuse_secret_key", "langfuse_host").Updates(token).Error
 	return err
 }
 
@@ -347,6 +351,14 @@ func (token *Token) GetModelLimitsMap() map[string]bool {
 		limitsMap[limit] = true
 	}
 	return limitsMap
+}
+
+func (token *Token) LangfuseEnabled() bool {
+	return token.LangfusePublicKey != "" && token.LangfuseSecretKey != "" && token.LangfuseHost != ""
+}
+
+func (token *Token) GetMaskedLangfuseSecretKey() string {
+	return MaskTokenKey(token.LangfuseSecretKey)
 }
 
 func DisableModelLimits(tokenId int) error {

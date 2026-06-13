@@ -18,6 +18,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/git-hulk/langfuse-go v0.1.0
 	github.com/glebarez/sqlite v1.9.0
 	github.com/go-audio/aiff v1.1.0
 	github.com/go-audio/wav v1.1.0
@@ -61,6 +62,14 @@ require (
 )
 
 require github.com/waffo-com/waffo-pancake-sdk-go v0.3.1
+
+require (
+	github.com/go-resty/resty/v2 v2.16.5 // indirect
+	github.com/gofrs/uuid/v5 v5.3.2 // indirect
+	github.com/hashicorp/go-set/v3 v3.0.1 // indirect
+	go.uber.org/multierr v1.11.0 // indirect
+	go.uber.org/zap v1.27.0 // indirect
+)
 
 require (
 	github.com/DmitriyVTitov/size v1.5.0 // indirect

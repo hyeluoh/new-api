@@ -45,6 +45,9 @@ export const apiKeySchema = z.object({
   model_limits_enabled: z.boolean(),
   model_limits: z.string().nullish().default(''),
   allow_ips: z.string().nullish().default(''),
+  langfuse_public_key: z.string().nullish().default(''),
+  langfuse_secret_key: z.string().nullish().default(''),
+  langfuse_host: z.string().nullish().default(''),
 })
 
 export type ApiKey = z.infer<typeof apiKeySchema>
@@ -92,6 +95,9 @@ export interface ApiKeyFormData {
   allow_ips: string
   group: string
   cross_group_retry: boolean
+  langfuse_public_key?: string
+  langfuse_secret_key?: string
+  langfuse_host?: string
 }
 
 // ============================================================================
