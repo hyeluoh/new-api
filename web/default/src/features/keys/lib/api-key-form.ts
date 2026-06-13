@@ -38,6 +38,9 @@ export function getApiKeyFormSchema(t: TFunction) {
       group: z.string().optional(),
       cross_group_retry: z.boolean().optional(),
       tokenCount: z.number().min(1).optional(),
+      langfuse_host: z.string().optional(),
+      langfuse_public_key: z.string().optional(),
+      langfuse_secret_key: z.string().optional(),
     })
     .superRefine((data, ctx) => {
       if (data.unlimited_quota) {
@@ -73,6 +76,9 @@ export const API_KEY_FORM_DEFAULT_VALUES: ApiKeyFormValues = {
   group: DEFAULT_GROUP,
   cross_group_retry: true,
   tokenCount: 1,
+  langfuse_host: '',
+  langfuse_public_key: '',
+  langfuse_secret_key: '',
 }
 
 export function getApiKeyFormDefaultValues(
@@ -109,6 +115,9 @@ export function transformFormDataToPayload(
     allow_ips: data.allow_ips || '',
     group: data.group || '',
     cross_group_retry: data.group === 'auto' ? !!data.cross_group_retry : false,
+    langfuse_host: data.langfuse_host || '',
+    langfuse_public_key: data.langfuse_public_key || '',
+    langfuse_secret_key: data.langfuse_secret_key || '',
   }
 }
 
@@ -135,5 +144,8 @@ export function transformApiKeyToFormDefaults(
     group: apiKey.group || DEFAULT_GROUP,
     cross_group_retry: !!apiKey.cross_group_retry,
     tokenCount: 1,
+    langfuse_host: apiKey.langfuse_host || '',
+    langfuse_public_key: apiKey.langfuse_public_key || '',
+    langfuse_secret_key: apiKey.langfuse_secret_key || '',
   }
 }
