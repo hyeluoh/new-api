@@ -1,5 +1,14 @@
 {
   "translation": {
+    "Langfuse Observability": "Khả năng quan sát Langfuse",
+    "Configure Langfuse tracing for this API key": "Cấu hình theo dõi Langfuse cho API key này",
+    "Langfuse Host": "Máy chủ Langfuse",
+    "Langfuse server URL": "URL máy chủ Langfuse",
+    "Langfuse Public Key": "Khóa công khai Langfuse",
+    "Langfuse Secret Key": "Khóa bí mật Langfuse",
+    "Enter your Langfuse secret key": "Nhập khóa bí mật Langfuse của bạn",
+    "Leave empty to keep the current secret key": "Để trống để giữ khóa bí mật hiện tại",
+    "Leave empty to keep current": "Để trống để giữ giá trị hiện tại",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_one": " + Tìm kiếm Web {{count}} lần / 1K lần * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_other": " + Tìm kiếm Web {{count}} lần / 1K lần * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + 图片生成调用 {{symbol}}{{price}} / 1次 * {{ratioType}} {{ratio}}": " + Gọi tạo hình ảnh {{symbol}}{{price}} / 1 lần * {{ratioType}} {{ratio}}",

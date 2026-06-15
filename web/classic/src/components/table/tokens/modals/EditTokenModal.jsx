@@ -53,6 +53,7 @@ import {
   IconSave,
   IconClose,
   IconKey,
+  IconActivity,
 } from '@douyinfe/semi-icons';
 import { useTranslation } from 'react-i18next';
 import { StatusContext } from '../../../../context/Status';
@@ -81,6 +82,9 @@ const EditTokenModal = (props) => {
     allow_ips: '',
     group: '',
     cross_group_retry: false,
+    langfuse_host: '',
+    langfuse_public_key: '',
+    langfuse_secret_key: '',
     tokenCount: 1,
   });
 
@@ -638,6 +642,63 @@ const EditTokenModal = (props) => {
                       )}
                       showClear
                       style={{ width: '100%' }}
+                    />
+                  </Col>
+                </Row>
+              </Card>
+
+              {/* Langfuse 可观测性 */}
+              <Card className='!rounded-2xl shadow-sm border-0'>
+                <div className='flex items-center mb-2'>
+                  <Avatar
+                    size='small'
+                    color='orange'
+                    className='mr-2 shadow-md'
+                  >
+                    <IconActivity size={16} />
+                  </Avatar>
+                  <div>
+                    <Text className='text-lg font-medium'>
+                      {t('Langfuse Observability')}
+                    </Text>
+                    <div className='text-xs text-gray-600'>
+                      {t('Configure Langfuse tracing for this API key')}
+                    </div>
+                  </div>
+                </div>
+                <Row gutter={12}>
+                  <Col span={24}>
+                    <Form.Input
+                      field='langfuse_host'
+                      label={t('Langfuse Host')}
+                      placeholder='https://cloud.langfuse.com'
+                      extraText={t('Langfuse server URL')}
+                      showClear
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <Form.Input
+                      field='langfuse_public_key'
+                      label={t('Langfuse Public Key')}
+                      placeholder='pk-...'
+                      showClear
+                    />
+                  </Col>
+                  <Col span={24}>
+                    <Form.Input
+                      field='langfuse_secret_key'
+                      label={t('Langfuse Secret Key')}
+                      mode='password'
+                      placeholder={
+                        isEdit
+                          ? t('Leave empty to keep current')
+                          : 'sk-...'
+                      }
+                      extraText={
+                        isEdit
+                          ? t('Leave empty to keep the current secret key')
+                          : t('Enter your Langfuse secret key')
+                      }
                     />
                   </Col>
                 </Row>

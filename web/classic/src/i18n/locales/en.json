@@ -1,5 +1,14 @@
 {
   "translation": {
+    "Langfuse Observability": "Langfuse Observability",
+    "Configure Langfuse tracing for this API key": "Configure Langfuse tracing for this API key",
+    "Langfuse Host": "Langfuse Host",
+    "Langfuse server URL": "Langfuse server URL",
+    "Langfuse Public Key": "Langfuse Public Key",
+    "Langfuse Secret Key": "Langfuse Secret Key",
+    "Enter your Langfuse secret key": "Enter your Langfuse secret key",
+    "Leave empty to keep the current secret key": "Leave empty to keep the current secret key",
+    "Leave empty to keep current": "Leave empty to keep current",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_one": " + Web search {{count}} time / 1K times * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_other": " + Web search {{count}} times / 1K times * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + 图片生成调用 {{symbol}}{{price}} / 1次 * {{ratioType}} {{ratio}}": " + Image generation call {{symbol}}{{price}} / 1 time * {{ratioType}} {{ratio}}",

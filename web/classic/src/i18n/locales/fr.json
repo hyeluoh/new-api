@@ -1,5 +1,14 @@
 {
   "translation": {
+    "Langfuse Observability": "Observabilité Langfuse",
+    "Configure Langfuse tracing for this API key": "Configurer le traçage Langfuse pour cette clé API",
+    "Langfuse Host": "Hôte Langfuse",
+    "Langfuse server URL": "URL du serveur Langfuse",
+    "Langfuse Public Key": "Clé publique Langfuse",
+    "Langfuse Secret Key": "Clé secrète Langfuse",
+    "Enter your Langfuse secret key": "Saisissez votre clé secrète Langfuse",
+    "Leave empty to keep the current secret key": "Laisser vide pour conserver la clé secrète actuelle",
+    "Leave empty to keep current": "Laisser vide pour conserver la valeur actuelle",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_one": " + Recherche Web {{count}} fois / 1K fois * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_many": " + Recherche Web {{count}} fois / 1K fois * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_other": " + Recherche Web {{count}} fois / 1K fois * {{symbol}}{{price}} * {{ratioType}} {{ratio}}",
