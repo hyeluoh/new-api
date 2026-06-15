@@ -166,9 +166,15 @@ func RecordTrace(config LangfuseConfig, data LangfuseTraceData) {
 		}
 
 		trace := client.StartTrace(ctx, traceName)
-		trace.UserID = strconv.Itoa(data.UserID)
+		// Langfuse trace 顶层仅 userId 一个用户槽，把 username 放顶层；
+		// username 为空时 fallback 到数字 id，保证顶层始终有用户标识
+		userID := data.UserName
+		if userID == "" {
+			userID = strconv.Itoa(data.UserID)
+		}
+		trace.UserID = userID
 		trace.Metadata = map[string]interface{}{
-			"username":   data.UserName,
+			"user_id":    data.UserID,
 			"token_name": data.TokenName,
 			"channel_id": data.ChannelID,
 			"group":      data.Group,
