@@ -1,5 +1,14 @@
 {
   "translation": {
+    "Langfuse Observability": "Langfuse オブザーバビリティ",
+    "Configure Langfuse tracing for this API key": "この API キーの Langfuse トレースを設定",
+    "Langfuse Host": "Langfuse ホスト",
+    "Langfuse server URL": "Langfuse サーバー URL",
+    "Langfuse Public Key": "Langfuse パブリックキー",
+    "Langfuse Secret Key": "Langfuse シークレットキー",
+    "Enter your Langfuse secret key": "Langfuse シークレットキーを入力",
+    "Leave empty to keep the current secret key": "現在のシークレットキーを保持する場合は空欄にしてください",
+    "Leave empty to keep current": "変更しない場合は空欄にしてください",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_one": " + Web検索 {{count}}回 / 1K回 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_one",
     " + Web搜索 {{count}}次 / 1K 次 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_other": " + Web検索 {{count}}回 / 1K回 * {{symbol}}{{price}} * {{ratioType}} {{ratio}}_other",
     " + 图片生成调用 {{symbol}}{{price}} / 1次 * {{ratioType}} {{ratio}}": " + 画像生成APIコール {{symbol}}{{price}} / 1回 * {{ratioType}} {{ratio}}",

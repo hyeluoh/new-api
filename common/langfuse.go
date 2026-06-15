@@ -24,6 +24,7 @@ type LangfuseConfig struct {
 type LangfuseTraceData struct {
 	RequestID        string
 	UserID           int
+	UserName         string
 	TokenName        string
 	ModelName        string
 	ChannelID        int
@@ -167,6 +168,7 @@ func RecordTrace(config LangfuseConfig, data LangfuseTraceData) {
 		trace := client.StartTrace(ctx, traceName)
 		trace.UserID = strconv.Itoa(data.UserID)
 		trace.Metadata = map[string]interface{}{
+			"username":   data.UserName,
 			"token_name": data.TokenName,
 			"channel_id": data.ChannelID,
 			"group":      data.Group,
