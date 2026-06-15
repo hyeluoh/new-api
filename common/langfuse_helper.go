@@ -32,6 +32,7 @@ func RecordLangfuseTraceFromContext(c *gin.Context, modelName string, promptToke
 		LangfuseTraceData{
 			RequestID:        GetContextKeyString(c, RequestIdKey),
 			UserID:           GetContextKeyInt(c, constant.ContextKeyUserId),
+			UserName:         GetContextKeyString(c, constant.ContextKeyUserName),
 			TokenName:        c.GetString("token_name"),
 			ModelName:        modelName,
 			ChannelID:        GetContextKeyInt(c, constant.ContextKeyChannelId),
@@ -74,6 +75,7 @@ func RecordLangfuseErrorTrace(c *gin.Context, modelName string, statusCode int, 
 		LangfuseTraceData{
 			RequestID:    GetContextKeyString(c, RequestIdKey),
 			UserID:       GetContextKeyInt(c, constant.ContextKeyUserId),
+			UserName:     GetContextKeyString(c, constant.ContextKeyUserName),
 			TokenName:    c.GetString("token_name"),
 			ModelName:    modelName,
 			ChannelID:    GetContextKeyInt(c, constant.ContextKeyChannelId),
