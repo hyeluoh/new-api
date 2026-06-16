@@ -36,4 +36,3 @@ data/
 token_estimator_test.go
 skills-lock.json
 .playwright-mcp
-docs/superpowers/
