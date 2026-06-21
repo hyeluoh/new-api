@@ -45,7 +45,8 @@ import { Label } from '@/components/ui/label'
 import { Dialog } from '@/components/dialog'
 import { PasswordInput } from '@/components/password-input'
 import { Turnstile } from '@/components/turnstile'
-import { login, wechatLoginByCode } from '@/features/auth/api'
+import { Switch } from '@/components/ui/switch'
+import { login, ldapLogin, wechatLoginByCode } from '@/features/auth/api'
 import { LegalConsent } from '@/features/auth/components/legal-consent'
 import { OAuthProviders } from '@/features/auth/components/oauth-providers'
 import { loginFormSchema } from '@/features/auth/constants'
@@ -66,11 +67,13 @@ export function UserAuthForm({
   const [passkeySupported, setPasskeySupported] = useState(false)
   const [isPasskeyLoading, setIsPasskeyLoading] = useState(false)
   const [isWeChatDialogOpen, setIsWeChatDialogOpen] = useState(false)
+  const [useLdapLogin, setUseLdapLogin] = useState(false)
   const [isWeChatSubmitting, setIsWeChatSubmitting] = useState(false)
   const legalConsentErrorMessage = t('Please agree to the legal terms first')
   const loginFailedMessage = t('Login failed')
 
   const { status } = useStatus()
+  const ldapLoginEnabled = Boolean(status?.ldap_login)
   const passkeyLoginEnabled = Boolean(
     status?.passkey_login ?? status?.data?.passkey_login
   )
@@ -152,7 +155,8 @@ export function UserAuthForm({
 
     setIsLoading(true)
     try {
-      const res = await login({
+      const loginFn = useLdapLogin ? ldapLogin : login
+      const res = await loginFn({
         username: data.username,
         password: data.password,
         turnstile: turnstileToken,
@@ -370,6 +374,18 @@ export function UserAuthForm({
                 </FormItem>
               )}
             />
+
+            {ldapLoginEnabled && (
+              <div className='flex items-center justify-end gap-2 mt-1'>
+                <span className='text-muted-foreground text-sm'>
+                  {t('LDAP Login')}
+                </span>
+                <Switch
+                  checked={useLdapLogin}
+                  onCheckedChange={setUseLdapLogin}
+                />
+              </div>
+            )}
 
             {/* Submit Button */}
             <Button

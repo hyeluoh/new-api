@@ -62,6 +62,10 @@ redemption.expire_time_invalid: "Expiration time cannot be earlier than current 
 
 # User messages
 user.password_login_disabled: "Password login has been disabled by administrator"
+ldap.not_enabled: "LDAP authentication has not been enabled by the administrator"
+ldap.not_configured: "LDAP server is not configured"
+ldap.invalid_credentials: "Invalid LDAP username or password"
+ldap.auth_failed: "LDAP authentication failed"
 user.register_disabled: "New user registration has been disabled by administrator"
 user.password_register_disabled: "Password registration has been disabled by administrator, please use third-party account verification"
 user.username_or_password_empty: "Username or password is empty"

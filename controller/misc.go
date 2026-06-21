@@ -107,6 +107,7 @@ func GetStatus(c *gin.Context) {
 		"SidebarModulesAdmin": common.OptionMap["SidebarModulesAdmin"],
 
 		"oidc_enabled":                system_setting.GetOIDCSettings().Enabled,
+		"ldap_login":                   system_setting.GetLDAPSettings().Enabled,
 		"oidc_client_id":              system_setting.GetOIDCSettings().ClientId,
 		"oidc_authorization_endpoint": system_setting.GetOIDCSettings().AuthorizationEndpoint,
 		"passkey_login":               passkeySetting.Enabled,

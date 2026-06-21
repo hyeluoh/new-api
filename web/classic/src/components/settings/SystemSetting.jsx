@@ -110,6 +110,18 @@ const SystemSetting = () => {
     'fetch_setting.ip_list': [],
     'fetch_setting.allowed_ports': [],
     'fetch_setting.apply_ip_filter_for_domain': true,
+    'ldap.enabled': '',
+    'ldap.server_url': '',
+    'ldap.bind_dn': '',
+    'ldap.bind_password': '',
+    'ldap.user_base': '',
+    'ldap.user_filter': '',
+    'ldap.username_attribute': '',
+    'ldap.display_name_attribute': '',
+    'ldap.email_attribute': '',
+    'ldap.skip_tls_verify': '',
+    'ldap.auto_register': '',
+    'ldap.default_group': '',
   });
 
   const [originInputs, setOriginInputs] = useState({});
@@ -205,6 +217,22 @@ const SystemSetting = () => {
           case 'passkey.user_verification':
             // 确保有默认值
             item.value = item.value || 'preferred';
+            break;
+          case 'ldap.enabled':
+          case 'ldap.skip_tls_verify':
+          case 'ldap.auto_register':
+            item.value = toBoolean(item.value);
+            break;
+          case 'ldap.server_url':
+          case 'ldap.bind_dn':
+          case 'ldap.bind_password':
+          case 'ldap.user_base':
+          case 'ldap.user_filter':
+          case 'ldap.username_attribute':
+          case 'ldap.display_name_attribute':
+          case 'ldap.email_attribute':
+          case 'ldap.default_group':
+            item.value = item.value || '';
             break;
           case 'Price':
           case 'MinTopUp':
@@ -675,6 +703,32 @@ const SystemSetting = () => {
       value: formValues['passkey.origins'] || inputs['passkey.origins'] || '',
     });
 
+    await updateOptions(options);
+  };
+
+  const submitLDAPSettings = async () => {
+    const formValues = formApiRef.current?.getValues() || {};
+    const keys = [
+      'ldap.enabled',
+      'ldap.server_url',
+      'ldap.bind_dn',
+      'ldap.bind_password',
+      'ldap.user_base',
+      'ldap.user_filter',
+      'ldap.username_attribute',
+      'ldap.display_name_attribute',
+      'ldap.email_attribute',
+      'ldap.skip_tls_verify',
+      'ldap.auto_register',
+      'ldap.default_group',
+    ];
+    const options = keys.map((key) => {
+      let value = formValues[key] ?? inputs[key] ?? '';
+      if (typeof value === 'boolean') {
+        value = value.toString();
+      }
+      return { key, value };
+    });
     await updateOptions(options);
   };
 
@@ -1221,6 +1275,124 @@ const SystemSetting = () => {
                     style={{ marginTop: 16 }}
                   >
                     {t('保存 Passkey 设置')}
+                  </Button>
+                </Form.Section>
+              </Card>
+
+              <Card>
+                <Form.Section text={t('配置 LDAP 登录')}>
+                  <Banner
+                    type='info'
+                    description={t(
+                      'LDAP 允许用户通过企业目录服务（如 OpenLDAP、Active Directory）进行身份验证。配置 Bind DN 可启用搜索绑定模式，留空则使用简单绑定模式。',
+                    )}
+                  />
+                  <div style={{ marginTop: 16 }} />
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                      <Form.Checkbox
+                        field="['ldap.enabled']"
+                        label={t('启用 LDAP 登录')}
+                        extra={t('允许用户通过 LDAP 服务器进行身份验证')}
+                      >
+                        {t('启用 LDAP 登录')}
+                      </Form.Checkbox>
+                    </Col>
+                  </Row>
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                      <Form.Input
+                        field="['ldap.server_url']"
+                        label={t('服务器地址')}
+                        placeholder='ldap://host:389 或 ldaps://host:636'
+                      />
+                    </Col>
+                  </Row>
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Input
+                        field="['ldap.bind_dn']"
+                        label={t('Bind DN（可选）')}
+                        placeholder='cn=admin,dc=example,dc=com'
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Input
+                        field="['ldap.bind_password']"
+                        label={t('Bind 密码')}
+                        mode='password'
+                      />
+                    </Col>
+                  </Row>
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Input
+                        field="['ldap.user_base']"
+                        label={t('用户 Base DN')}
+                        placeholder='ou=users,dc=example,dc=com'
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Input
+                        field="['ldap.user_filter']"
+                        label={t('用户过滤规则')}
+                        placeholder='(uid=%s)'
+                      />
+                    </Col>
+                  </Row>
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                      <Form.Input
+                        field="['ldap.username_attribute']"
+                        label={t('用户名属性')}
+                        placeholder='uid'
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                      <Form.Input
+                        field="['ldap.display_name_attribute']"
+                        label={t('显示名属性')}
+                        placeholder='cn'
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={8} lg={8} xl={8}>
+                      <Form.Input
+                        field="['ldap.email_attribute']"
+                        label={t('邮箱属性')}
+                        placeholder='mail'
+                      />
+                    </Col>
+                  </Row>
+                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                      <Form.Input
+                        field="['ldap.default_group']"
+                        label={t('默认用户组')}
+                        placeholder='default'
+                      />
+                    </Col>
+                    <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                      <Form.Checkbox
+                        field="['ldap.skip_tls_verify']"
+                        label={t('跳过 TLS 验证')}
+                      >
+                        {t('跳过证书验证')}
+                      </Form.Checkbox>
+                    </Col>
+                    <Col xs={24} sm={24} md={6} lg={6} xl={6}>
+                      <Form.Checkbox
+                        field="['ldap.auto_register']"
+                        label={t('自动注册用户')}
+                      >
+                        {t('首次登录自动创建账户')}
+                      </Form.Checkbox>
+                    </Col>
+                  </Row>
+                  <Button
+                    onClick={submitLDAPSettings}
+                    style={{ marginTop: 16 }}
+                  >
+                    {t('保存 LDAP 设置')}
                   </Button>
                 </Form.Section>
               </Card>

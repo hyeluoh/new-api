@@ -49,11 +49,11 @@ require (
 	github.com/tiktoken-go/tokenizer v0.6.2
 	github.com/waffo-com/waffo-go v1.3.1
 	github.com/yapingcat/gomedia v0.0.0-20240906162731-17feea57090c
-	golang.org/x/crypto v0.45.0
+	golang.org/x/crypto v0.48.0
 	golang.org/x/image v0.38.0
-	golang.org/x/net v0.47.0
+	golang.org/x/net v0.50.0
 	golang.org/x/sync v0.20.0
-	golang.org/x/sys v0.38.0
+	golang.org/x/sys v0.41.0
 	golang.org/x/text v0.35.0
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.3
@@ -61,9 +61,14 @@ require (
 	gorm.io/gorm v1.25.2
 )
 
-require github.com/waffo-com/waffo-pancake-sdk-go v0.3.1
+require (
+	github.com/go-ldap/ldap/v3 v3.4.13
+	github.com/waffo-com/waffo-pancake-sdk-go v0.3.1
+)
 
 require (
+	github.com/Azure/go-ntlmssp v0.1.0 // indirect
+	github.com/go-asn1-ber/asn1-ber v1.5.8-0.20250403174932-29230038a667 // indirect
 	github.com/go-resty/resty/v2 v2.16.5 // indirect
 	github.com/gofrs/uuid/v5 v5.3.2 // indirect
 	github.com/hashicorp/go-set/v3 v3.0.1 // indirect

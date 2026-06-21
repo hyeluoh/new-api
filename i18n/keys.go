@@ -116,6 +116,14 @@ const (
 	MsgUserQuotaChangeZero           = "user.quota_change_zero"
 )
 
+// LDAP related messages
+const (
+	MsgLDAPNotEnabled        = "ldap.not_enabled"
+	MsgLDAPNotConfigured     = "ldap.not_configured"
+	MsgLDAPInvalidCredentials = "ldap.invalid_credentials"
+	MsgLDAPAuthFailed        = "ldap.auth_failed"
+)
+
 // Quota related messages
 const (
 	MsgQuotaNegative        = "quota.negative"

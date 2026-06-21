@@ -63,6 +63,10 @@ redemption.expire_time_invalid: "过期时间不能早于当前时间"
 
 # User messages
 user.password_login_disabled: "管理员关闭了密码登录"
+ldap.not_enabled: "管理员未开启 LDAP 登录"
+ldap.not_configured: "LDAP 服务器未配置"
+ldap.invalid_credentials: "LDAP 用户名或密码错误"
+ldap.auth_failed: "LDAP 认证失败"
 user.register_disabled: "管理员关闭了新用户注册"
 user.password_register_disabled: "管理员关闭了通过密码进行注册，请使用第三方账户验证的形式进行注册"
 user.username_or_password_empty: "用户名或密码为空"

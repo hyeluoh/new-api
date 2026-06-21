@@ -4218,6 +4218,24 @@
     "并确认自行承担部署": "confirm that I bear legal responsibility arising from deployment",
     "运营和收费行为产生的法律责任": "operation and charging behavior",
     "，": ", ",
-    "、": ", "
+    "、": ", ",
+    "配置 LDAP 登录": "Configure LDAP",
+    "LDAP 登录": "LDAP Login",
+    "启用 LDAP 登录": "Enable LDAP Login",
+    "允许用户通过 LDAP 服务器进行身份验证": "Allow users to authenticate via an LDAP server",
+    "Bind DN（可选）": "Bind DN (optional)",
+    "Bind 密码": "Bind Password",
+    "用户 Base DN": "User Base DN",
+    "用户过滤规则": "User Filter",
+    "用户名属性": "Username Attribute",
+    "显示名属性": "Display Name Attribute",
+    "邮箱属性": "Email Attribute",
+    "默认用户组": "Default Group",
+    "跳过 TLS 验证": "Skip TLS Verification",
+    "跳过证书验证": "Skip certificate verification",
+    "自动注册用户": "Auto Register Users",
+    "首次登录自动创建账户": "Automatically create a local account on first LDAP login",
+    "保存 LDAP 设置": "Save LDAP Settings",
+    "LDAP 允许用户通过企业目录服务（如 OpenLDAP、Active Directory）进行身份验证。配置 Bind DN 可启用搜索绑定模式，留空则使用简单绑定模式。": "LDAP allows users to authenticate via enterprise directory services (e.g., OpenLDAP, Active Directory). Configure Bind DN to enable search-bind mode, or leave empty for simple bind mode."
   }
 }

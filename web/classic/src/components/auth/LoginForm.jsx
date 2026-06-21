@@ -49,6 +49,7 @@ import {
   Form,
   Icon,
   Modal,
+  Switch,
 } from '@douyinfe/semi-ui';
 import Title from '@douyinfe/semi-ui/lib/es/typography/title';
 import Text from '@douyinfe/semi-ui/lib/es/typography/text';
@@ -112,6 +113,7 @@ const LoginForm = () => {
   const githubTimeoutRef = useRef(null);
   const githubButtonText = t(githubButtonTextKeyByState[githubButtonState]);
   const [customOAuthLoading, setCustomOAuthLoading] = useState({});
+  const [useLdapLogin, setUseLdapLogin] = useState(false);
 
   const logo = getLogo();
   const systemName = getSystemName();
@@ -228,13 +230,13 @@ const LoginForm = () => {
     setLoginLoading(true);
     try {
       if (username && password) {
-        const res = await API.post(
-          `/api/user/login?turnstile=${turnstileToken}`,
-          {
-            username,
-            password,
-          },
-        );
+        const loginUrl = useLdapLogin
+          ? `/api/user/login/ldap?turnstile=${turnstileToken}`
+          : `/api/user/login?turnstile=${turnstileToken}`;
+        const res = await API.post(loginUrl, {
+          username,
+          password,
+        });
         const { success, message, data } = res.data;
         if (success) {
           // 检查是否需要2FA验证
@@ -799,6 +801,19 @@ const LoginForm = () => {
                         )}
                       </Text>
                     </Checkbox>
+                  </div>
+                )}
+
+                {status.ldap_login && (
+                  <div className='flex items-center justify-end pt-2'>
+                    <Text size='small' className='text-gray-600 mr-2'>
+                      {t('LDAP 登录')}
+                    </Text>
+                    <Switch
+                      checked={useLdapLogin}
+                      onChange={(checked) => setUseLdapLogin(checked)}
+                      size='small'
+                    />
                   </div>
                 )}
 
