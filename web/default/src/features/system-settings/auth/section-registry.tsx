@@ -23,6 +23,7 @@ import { BotProtectionSection } from './bot-protection-section'
 import { CustomOAuthSection } from './custom-oauth/custom-oauth-section'
 import { OAuthSection } from './oauth-section'
 import { PasskeySection } from './passkey-section'
+import { LdapSection } from './ldap-section'
 
 const AUTH_SECTIONS = [
   {
@@ -116,6 +117,28 @@ const AUTH_SECTIONS = [
     id: 'custom-oauth',
     titleKey: 'Custom OAuth',
     build: () => <CustomOAuthSection />,
+  },
+  {
+    id: 'ldap',
+    titleKey: 'LDAP Authentication',
+    build: (settings: AuthSettings) => (
+      <LdapSection
+        defaultValues={{
+          'ldap.enabled': settings['ldap.enabled'],
+          'ldap.server_url': settings['ldap.server_url'],
+          'ldap.bind_dn': settings['ldap.bind_dn'],
+          'ldap.bind_password': settings['ldap.bind_password'],
+          'ldap.user_base': settings['ldap.user_base'],
+          'ldap.user_filter': settings['ldap.user_filter'],
+          'ldap.username_attribute': settings['ldap.username_attribute'],
+          'ldap.display_name_attribute': settings['ldap.display_name_attribute'],
+          'ldap.email_attribute': settings['ldap.email_attribute'],
+          'ldap.skip_tls_verify': settings['ldap.skip_tls_verify'],
+          'ldap.auto_register': settings['ldap.auto_register'],
+          'ldap.default_group': settings['ldap.default_group'],
+        }}
+      />
+    ),
   },
 ] as const
 
