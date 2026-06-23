@@ -45,7 +45,6 @@ import { Label } from '@/components/ui/label'
 import { Dialog } from '@/components/dialog'
 import { PasswordInput } from '@/components/password-input'
 import { Turnstile } from '@/components/turnstile'
-import { Switch } from '@/components/ui/switch'
 import { login, ldapLogin, wechatLoginByCode } from '@/features/auth/api'
 import { LegalConsent } from '@/features/auth/components/legal-consent'
 import { OAuthProviders } from '@/features/auth/components/oauth-providers'
@@ -67,13 +66,15 @@ export function UserAuthForm({
   const [passkeySupported, setPasskeySupported] = useState(false)
   const [isPasskeyLoading, setIsPasskeyLoading] = useState(false)
   const [isWeChatDialogOpen, setIsWeChatDialogOpen] = useState(false)
-  const [useLdapLogin, setUseLdapLogin] = useState(false)
   const [isWeChatSubmitting, setIsWeChatSubmitting] = useState(false)
+  const [loginMode, setLoginMode] = useState<'password' | 'ldap'>('password')
   const legalConsentErrorMessage = t('Please agree to the legal terms first')
   const loginFailedMessage = t('Login failed')
 
   const { status } = useStatus()
-  const ldapLoginEnabled = Boolean(status?.ldap_login)
+  const ldapLoginEnabled = Boolean(
+    status?.ldap_login ?? status?.data?.ldap_login
+  )
   const passkeyLoginEnabled = Boolean(
     status?.passkey_login ?? status?.data?.passkey_login
   )
@@ -108,6 +109,14 @@ export function UserAuthForm({
   )
   const hasAlternativeLogin =
     passkeyLoginEnabled || hasWeChatLogin || hasOAuthLogin
+  const showCredentialLogin = passwordLoginEnabled || ldapLoginEnabled
+  const isLdapLoginSelected =
+    ldapLoginEnabled && (!passwordLoginEnabled || loginMode === 'ldap')
+  const canSwitchCredentialLogin = passwordLoginEnabled && ldapLoginEnabled
+  const showAlternativeLoginFirst =
+    hasAlternativeLogin && !isLdapLoginSelected
+  const showAlternativeLoginAfterCredentials =
+    hasAlternativeLogin && isLdapLoginSelected
 
   useEffect(() => {
     if (requiresLegalConsent) {
@@ -116,6 +125,14 @@ export function UserAuthForm({
       setAgreedToLegal(true)
     }
   }, [requiresLegalConsent])
+
+  useEffect(() => {
+    if (ldapLoginEnabled) {
+      setLoginMode('ldap')
+    } else {
+      setLoginMode('password')
+    }
+  }, [ldapLoginEnabled])
 
   useEffect(() => {
     detectPasskeySupport()
@@ -155,7 +172,7 @@ export function UserAuthForm({
 
     setIsLoading(true)
     try {
-      const loginFn = useLdapLogin ? ldapLogin : login
+      const loginFn = isLdapLoginSelected ? ldapLogin : login
       const res = await loginFn({
         username: data.username,
         password: data.password,
@@ -329,20 +346,44 @@ export function UserAuthForm({
         className={cn('grid gap-4', className)}
         {...props}
       >
-        {hasAlternativeLogin && alternativeLoginMethods}
+        {showAlternativeLoginFirst && alternativeLoginMethods}
 
-        {passwordLoginEnabled && (
+        {showCredentialLogin && (
           <>
+            {canSwitchCredentialLogin && (
+              <div className='flex justify-end'>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='sm'
+                  className='text-muted-foreground h-auto px-0 py-0 text-sm font-medium hover:bg-transparent hover:text-foreground'
+                  onClick={() =>
+                    setLoginMode(isLdapLoginSelected ? 'password' : 'ldap')
+                  }
+                >
+                  {isLdapLoginSelected ? t('Password Login') : t('LDAP Login')}
+                </Button>
+              </div>
+            )}
+
             {/* Username Field */}
             <FormField
               control={form.control}
               name='username'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t('Username or Email')}</FormLabel>
+                  <FormLabel>
+                    {isLdapLoginSelected
+                      ? t('LDAP Username')
+                      : t('Username or Email')}
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t('Enter your username or email')}
+                      placeholder={
+                        isLdapLoginSelected
+                          ? t('Enter your LDAP username')
+                          : t('Enter your username or email')
+                      }
                       {...field}
                     />
                   </FormControl>
@@ -357,35 +398,31 @@ export function UserAuthForm({
               name='password'
               render={({ field }) => (
                 <FormItem className='relative'>
-                  <FormLabel>{t('Password')}</FormLabel>
+                  <FormLabel>
+                    {isLdapLoginSelected ? t('LDAP Password') : t('Password')}
+                  </FormLabel>
                   <FormControl>
                     <PasswordInput
-                      placeholder={t('Enter password')}
+                      placeholder={
+                        isLdapLoginSelected
+                          ? t('Enter LDAP password')
+                          : t('Enter password')
+                      }
                       {...field}
                     />
                   </FormControl>
                   <FormMessage />
-                  <Link
-                    to='/forgot-password'
-                    className='text-muted-foreground absolute end-0 -top-0.5 z-10 text-sm font-medium hover:opacity-75'
-                  >
-                    {t('Forgot password?')}
-                  </Link>
+                  {!isLdapLoginSelected && (
+                    <Link
+                      to='/forgot-password'
+                      className='text-muted-foreground absolute end-0 -top-0.5 z-10 text-sm font-medium hover:opacity-75'
+                    >
+                      {t('Forgot password?')}
+                    </Link>
+                  )}
                 </FormItem>
               )}
             />
-
-            {ldapLoginEnabled && (
-              <div className='flex items-center justify-end gap-2 mt-1'>
-                <span className='text-muted-foreground text-sm'>
-                  {t('LDAP Login')}
-                </span>
-                <Switch
-                  checked={useLdapLogin}
-                  onCheckedChange={setUseLdapLogin}
-                />
-              </div>
-            )}
 
             {/* Submit Button */}
             <Button
@@ -394,7 +431,7 @@ export function UserAuthForm({
               disabled={isLoading || (requiresLegalConsent && !agreedToLegal)}
             >
               {isLoading ? <Loader2 className='animate-spin' /> : <LogIn />}
-              {t('Sign in')}
+              {isLdapLoginSelected ? t('Sign in with LDAP') : t('Sign in')}
             </Button>
 
             {/* Turnstile */}
@@ -408,6 +445,8 @@ export function UserAuthForm({
             )}
           </>
         )}
+
+        {showAlternativeLoginAfterCredentials && alternativeLoginMethods}
 
         <LegalConsent
           status={status}

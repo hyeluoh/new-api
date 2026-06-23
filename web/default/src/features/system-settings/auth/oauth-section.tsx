@@ -524,6 +524,31 @@ export function OAuthSection(props: OAuthSectionProps) {
 
                 <FormField
                   control={form.control}
+                  name='ldap.enabled'
+                  render={({ field }) => (
+                    <SettingsSwitchItem>
+                      <SettingsSwitchContent>
+                        <FormLabel>{t('Enable LDAP Login')}</FormLabel>
+                        <FormDescription>
+                          {t('Allow users to authenticate via an LDAP server')}
+                        </FormDescription>
+                      </SettingsSwitchContent>
+                      <FormControl>
+                        <Switch
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          disabled={
+                            !form.watch('ldap.server_url') ||
+                            !form.watch('ldap.user_base')
+                          }
+                        />
+                      </FormControl>
+                    </SettingsSwitchItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name='oidc.client_id'
                   render={({ field }) => (
                     <FormItem>
@@ -753,31 +778,6 @@ export function OAuthSection(props: OAuthSectionProps) {
               </TabsContent>
 
               <TabsContent value='ldap' className={oauthTabContentClassName}>
-                <FormField
-                  control={form.control}
-                  name='ldap.enabled'
-                  render={({ field }) => (
-                    <SettingsSwitchItem>
-                      <SettingsSwitchContent>
-                        <FormLabel>{t('Enable LDAP')}</FormLabel>
-                        <FormDescription>
-                          {t('Allow users to authenticate via an LDAP server')}
-                        </FormDescription>
-                      </SettingsSwitchContent>
-                      <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          disabled={
-                            !form.watch('ldap.server_url') ||
-                            !form.watch('ldap.user_base')
-                          }
-                        />
-                      </FormControl>
-                    </SettingsSwitchItem>
-                  )}
-                />
-
                 <FormField
                   control={form.control}
                   name='ldap.server_url'
