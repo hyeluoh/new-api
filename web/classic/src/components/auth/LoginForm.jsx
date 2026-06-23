@@ -49,7 +49,6 @@ import {
   Form,
   Icon,
   Modal,
-  Switch,
 } from '@douyinfe/semi-ui';
 import Title from '@douyinfe/semi-ui/lib/es/typography/title';
 import Text from '@douyinfe/semi-ui/lib/es/typography/text';
@@ -135,14 +134,18 @@ const LoginForm = () => {
   }, [statusState?.status]);
   const hasCustomOAuthProviders =
     (status.custom_oauth_providers || []).length > 0;
+  const passwordLoginEnabled =
+    (status.password_login_enabled ??
+      status.data?.password_login_enabled ??
+      true) !== false;
   const hasOAuthLoginOptions = Boolean(
     status.github_oauth ||
-      status.discord_oauth ||
-      status.oidc_enabled ||
-      status.wechat_login ||
-      status.linuxdo_oauth ||
-      status.telegram_oauth ||
-      hasCustomOAuthProviders,
+    status.discord_oauth ||
+    status.oidc_enabled ||
+    status.wechat_login ||
+    status.linuxdo_oauth ||
+    status.telegram_oauth ||
+    hasCustomOAuthProviders,
   );
 
   useEffect(() => {
@@ -155,6 +158,15 @@ const LoginForm = () => {
     setHasUserAgreement(status?.user_agreement_enabled || false);
     setHasPrivacyPolicy(status?.privacy_policy_enabled || false);
   }, [status]);
+
+  useEffect(() => {
+    if (status?.ldap_login) {
+      setUseLdapLogin(true);
+      setShowEmailLogin(true);
+    } else {
+      setUseLdapLogin(false);
+    }
+  }, [status?.ldap_login]);
 
   useEffect(() => {
     isPasskeySupported()
@@ -804,16 +816,19 @@ const LoginForm = () => {
                   </div>
                 )}
 
-                {status.ldap_login && (
+                {status.ldap_login && passwordLoginEnabled && (
                   <div className='flex items-center justify-end pt-2'>
-                    <Text size='small' className='text-gray-600 mr-2'>
-                      {t('LDAP 登录')}
-                    </Text>
-                    <Switch
-                      checked={useLdapLogin}
-                      onChange={(checked) => setUseLdapLogin(checked)}
+                    <Button
+                      theme='borderless'
+                      type='tertiary'
                       size='small'
-                    />
+                      className='!px-0'
+                      onClick={() => setUseLdapLogin(!useLdapLogin)}
+                    >
+                      {useLdapLogin
+                        ? t('使用 邮箱或用户名 登录')
+                        : t('LDAP 登录')}
+                    </Button>
                   </div>
                 )}
 
@@ -829,18 +844,20 @@ const LoginForm = () => {
                       (hasUserAgreement || hasPrivacyPolicy) && !agreedToTerms
                     }
                   >
-                    {t('继续')}
+                    {useLdapLogin ? t('LDAP 登录') : t('继续')}
                   </Button>
 
-                  <Button
-                    theme='borderless'
-                    type='tertiary'
-                    className='w-full !rounded-full'
-                    onClick={handleResetPasswordClick}
-                    loading={resetPasswordLoading}
-                  >
-                    {t('忘记密码？')}
-                  </Button>
+                  {!useLdapLogin && (
+                    <Button
+                      theme='borderless'
+                      type='tertiary'
+                      className='w-full !rounded-full'
+                      onClick={handleResetPasswordClick}
+                      loading={resetPasswordLoading}
+                    >
+                      {t('忘记密码？')}
+                    </Button>
+                  )}
                 </div>
               </Form>
 
@@ -973,8 +990,7 @@ const LoginForm = () => {
         style={{ top: '50%', left: '-120px' }}
       />
       <div className='w-full max-w-sm mt-[60px]'>
-        {showEmailLogin ||
-        !hasOAuthLoginOptions
+        {showEmailLogin || !hasOAuthLoginOptions
           ? renderEmailLoginForm()
           : renderOAuthOptions()}
         {renderWeChatLoginModal()}

@@ -709,7 +709,6 @@ const SystemSetting = () => {
   const submitLDAPSettings = async () => {
     const formValues = formApiRef.current?.getValues() || {};
     const keys = [
-      'ldap.enabled',
       'ldap.server_url',
       'ldap.bind_dn',
       'ldap.bind_password',
@@ -1145,6 +1144,15 @@ const SystemSetting = () => {
                       >
                         {t('允许通过 OIDC 进行登录')}
                       </Form.Checkbox>
+                      <Form.Checkbox
+                        field="['ldap.enabled']"
+                        noLabel
+                        onChange={(e) =>
+                          handleCheckboxChange('ldap.enabled', e)
+                        }
+                      >
+                        {t('启用 LDAP 登录')}
+                      </Form.Checkbox>
                     </Col>
                   </Row>
                 </Form.Section>
@@ -1288,18 +1296,9 @@ const SystemSetting = () => {
                     )}
                   />
                   <div style={{ marginTop: 16 }} />
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
-                    <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-                      <Form.Checkbox
-                        field="['ldap.enabled']"
-                        label={t('启用 LDAP 登录')}
-                        extra={t('允许用户通过 LDAP 服务器进行身份验证')}
-                      >
-                        {t('启用 LDAP 登录')}
-                      </Form.Checkbox>
-                    </Col>
-                  </Row>
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                  <Row
+                    gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}
+                  >
                     <Col xs={24} sm={24} md={24} lg={24} xl={24}>
                       <Form.Input
                         field="['ldap.server_url']"
@@ -1308,7 +1307,9 @@ const SystemSetting = () => {
                       />
                     </Col>
                   </Row>
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                  <Row
+                    gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}
+                  >
                     <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                       <Form.Input
                         field="['ldap.bind_dn']"
@@ -1324,7 +1325,9 @@ const SystemSetting = () => {
                       />
                     </Col>
                   </Row>
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                  <Row
+                    gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}
+                  >
                     <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                       <Form.Input
                         field="['ldap.user_base']"
@@ -1340,7 +1343,9 @@ const SystemSetting = () => {
                       />
                     </Col>
                   </Row>
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                  <Row
+                    gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}
+                  >
                     <Col xs={24} sm={24} md={8} lg={8} xl={8}>
                       <Form.Input
                         field="['ldap.username_attribute']"
@@ -1363,7 +1368,9 @@ const SystemSetting = () => {
                       />
                     </Col>
                   </Row>
-                  <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}>
+                  <Row
+                    gutter={{ xs: 8, sm: 16, md: 24, lg: 24, xl: 24, xxl: 24 }}
+                  >
                     <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                       <Form.Input
                         field="['ldap.default_group']"
